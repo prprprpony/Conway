@@ -59,6 +59,7 @@ int row, col;
 int x,y;
 int area;
 int ticks;
+int totalTicks = 0;
 int color;
 WINDOW *win = NULL;
 WINDOW *game = NULL;
@@ -123,7 +124,7 @@ int main(int argc, char *argv[])
 	
 	initCurses();
 	showSplash();
-	
+	totalTicks = 0;	
 	refresh();
 	getch();
 
@@ -227,6 +228,7 @@ int main(int argc, char *argv[])
 				{
 					cells[q] = 0;
 				}
+				totalTicks = 0;
 				render(cells, area/2);
 				updateWin(cells,area/2);
 				break;
@@ -343,7 +345,7 @@ int checkNeighbors(int x, int y, int cells[])
 void update(int cells[], int size)
 {
 	int numticks = ticks;
-	while(ticks >= 0)
+	while(ticks > 0)
 	{
 		int c;
 //		wclear(game);
@@ -373,6 +375,7 @@ void update(int cells[], int size)
 		wrefresh(game);
 		usleep(SLEEP_TIME);
 		ticks--;
+		totalTicks++;
 	}
 	ticks = numticks;
 }
@@ -392,6 +395,7 @@ void updateWin(int cells[], int size)
 	mvwprintw(win,rows/2 - 2,2,"Board Size: [%d, %d]",xs,ys);
 	mvwprintw(win,rows/2 - 1,2,"Cells Alive: %d",cellsAlive);
 	mvwprintw(win,rows/2,2,"Ticks Remaining: %d",ticks);
+	mvwprintw(win,rows/2 + 2,2,"Total ticks: %d",totalTicks);
 	wrefresh(win);
 }
 
@@ -462,6 +466,8 @@ void showSplash()
 
 	mvprintw(curcol + 1,cols/2 - 3, "CONWAY");
 	attroff(A_BOLD);
-	mvprintw(curcol + 2,cols/2 - 16, "Powered by Destructive Reasoning");
+	mvprintw(curcol + 2, cols/2 - 13, "Developed by Harley Wiltzer");
+	mvprintw(curcol + 3,cols/2 - 16, "Powered by Destructive Reasoning");
+	move(0,0);
 	attroff(COLOR_PAIR(YELLOW));
 }
