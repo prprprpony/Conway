@@ -429,6 +429,7 @@ void showSplash()
 	int i;
 	char logoPath[256];
 	FILE *fp;
+	logoPath[0] = '\0';
 	strcat(logoPath,getenv("HOME"));
 	strcat(logoPath,"/.conway/conwaylogo\0");
 //	char *logoPath = "/home/harwiltz/.conway/conwaylogo";
@@ -444,8 +445,8 @@ void showSplash()
 		char *stroke = line;
 		if(size == 0) for(size = 0; stroke[size] != '\0' && stroke[size] != '\n'; size++);
 		mvprintw(curcol++,cols/2 - size/2,stroke);
-		line = NULL;
 	}
+	free(line);
 	fclose(fp);
 
 	attron(COLOR_PAIR(YELLOW)|A_BOLD);
